@@ -24,6 +24,13 @@ try:
 except Exception as e:
     print("❌ MongoDB connection failed:", e)
 
+
+    @app.route("/ping", methods=["GET"])
+def ping():
+    print(f"📡 /ping hit from: {request.remote_addr}")
+    return jsonify({"status": "Running", "db_connected": client is not None}), 200
+
+
 if __name__ == "__main__":
     print("🚀 Starting Flask server...")
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
