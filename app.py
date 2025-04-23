@@ -3,6 +3,8 @@ from flask_cors import CORS
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+import ssl
+
 
 load_dotenv()
 
@@ -14,7 +16,7 @@ MONGO_URI = os.getenv("MONGO_URI")
 print(f"🔧 Attempting to connect to MongoDB URI: {MONGO_URI}")
 
 try:
-    client = MongoClient(MONGO_URI)
+    client = MongoClient(MONGO_URI, tls=True, tlsAllowInvalidCertificates=False, ssl_cert_reqs=ssl.CERT_REQUIRED)
     db = client.get_database()
     client.admin.command("ping")
     print("✅ MongoDB connected successfully.")
