@@ -3,7 +3,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-import certifi  # ✅ Atlas-compatible root cert bundle
+import certifi
 
 load_dotenv()
 
@@ -16,7 +16,7 @@ try:
     client = MongoClient(
         MONGO_URI,
         tls=True,
-        tlsCAFile=certifi.where(),  # ✅ correct way to verify CA root
+        tlsCAFile=certifi.where(),
         serverSelectionTimeoutMS=5000
     )
     db = client.get_database()
@@ -24,12 +24,11 @@ try:
 except Exception as e:
     print("❌ MongoDB connection failed:", e)
 
-
-    @app.route("/ping", methods=["GET"])
+# ✅ Moved this outside the try/except
+@app.route("/ping", methods=["GET"])
 def ping():
     print(f"📡 /ping hit from: {request.remote_addr}")
     return jsonify({"status": "Running", "db_connected": client is not None}), 200
-
 
 if __name__ == "__main__":
     print("🚀 Starting Flask server...")
